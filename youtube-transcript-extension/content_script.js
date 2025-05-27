@@ -4,7 +4,7 @@ const selectors = {
   transcriptButton: 'ytd-engagement-panel-title-action-button button, button[aria-label="Show transcript"], tp-yt-paper-button[aria-label="Show transcript"]',
   transcriptPanel: 'ytd-transcript-renderer, ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-searchable-transcript"]',
   transcriptSegment: 'ytd-transcript-segment-renderer',
-  transcriptText: '.ytd-transcript-segment-renderer > div > div > yt-formatted-string',
+  transcriptText: 'yt-formatted-string',
   transcriptDisplayId: 'youtube-transcript-display-container'
 };
 
@@ -20,7 +20,7 @@ async function openTranscriptPanel() {
   const transcriptButton = getElement(selectors.transcriptButton);
   let transcriptPanel = getElement(selectors.transcriptPanel);
 
-  if (transcriptPanel) {
+  if (transcriptPanel && transcriptPanel.querySelector('#ghost-cards') == null) {
     console.log("Transcript panel is already visible or present.");
     return transcriptPanel;
   }
@@ -205,8 +205,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 if (window.location.href.startsWith("https://www.youtube.com/watch")) {
   console.log("Initial load on a YouTube video page. Content script active.");
   // To avoid automatic display on load, ensure this is commented out:
-  // console.log("Waiting 7 seconds before trying to fetch transcript automatically...");
-  // setTimeout(processTranscriptRequest, 7000); 
+  console.log("Waiting 7 seconds before trying to fetch transcript automatically...");
+  setTimeout(processTranscriptRequest, 7000); 
 } else {
   console.log("Current page is not a YouTube video page.");
 }
